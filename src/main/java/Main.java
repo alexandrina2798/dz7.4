@@ -16,51 +16,50 @@ public class Main {
         System.out.println("Для быстрого поиска по базе введите название страны:");
         System.out.println();
 
-        boolean repeat = true;
+        /*boolean repeat = true;          при необходимости повторить до победного
+        while (repeat) { */
+        Scanner input = new Scanner(System.in, StandardCharsets.UTF_8);
+        String lostCountry = input.next();
 
-        while (repeat) {
-            Scanner input = new Scanner(System.in, StandardCharsets.UTF_8);
-            String lostCountry = input.next();
+        //Делаем первую букву в названии страны заглавной
+        lostCountry = lostCountry.substring(0, 1).toUpperCase() + lostCountry.substring(1);
 
-            //Делаем первую букву в названии страны заглавной
-            lostCountry = lostCountry.substring(0, 1).toUpperCase() + lostCountry.substring(1);
+        try {
+            Country foundedCountry = Country.valueOf(lostCountry);
+            System.out.print("Страна найдена в базе: ");
+            System.out.println(foundedCountry);
+            if (foundedCountry.getIsOpen()) {
+                System.out.println("Страна [" + foundedCountry + "] открыта для посещения.");
+            } else {
+                System.out.println("Страна [" + foundedCountry + "] закрыта для посещения.");
+            }
+            /*repeat = false;*/
+        } catch (IllegalArgumentException e) {
+            System.out.println("Наименование страны на английском введено некорректно, проверяем русское название");
 
             try {
-                Country foundedCountry = Country.valueOf(lostCountry);
-                System.out.print("Страна найдена в базе: ");
+                Country foundedCountry = Country.getByRuName(lostCountry);
                 System.out.println(foundedCountry);
                 if (foundedCountry.getIsOpen()) {
                     System.out.println("Страна [" + foundedCountry + "] открыта для посещения.");
                 } else {
                     System.out.println("Страна [" + foundedCountry + "] закрыта для посещения.");
                 }
-                repeat = false;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Наименование страны на английском введено некорректно, проверяем русское название");
-
-                try {
-                    Country foundedCountry = Country.getByRuName(lostCountry);
-                    System.out.println(foundedCountry);
-                    if (foundedCountry.getIsOpen()) {
-                        System.out.println("Страна [" + foundedCountry + "] открыта для посещения.");
-                    } else {
-                        System.out.println("Страна [" + foundedCountry + "] закрыта для посещения.");
-                    }
-                    repeat = false;
-                } catch (NoSuchCountryException noCountryError) {
-                    System.out.println("Проверьте написание страны и повторите ввод");
-                    System.out.println();
-                }
-
-            } catch (NullPointerException e) {
-                System.out.println("База пуста, либо мы не получили данных о стране. Обратитесь к администратору");
+                /*repeat = false;*/
+            } catch (NoSuchCountryException noCountryError) {
+                System.out.println("Проверьте написание страны");
+                System.out.println();
             }
+
+        } catch (NullPointerException e) {
+            System.out.println("База пуста, либо мы не получили данных о стране. Обратитесь к администратору");
         }
-
         System.out.println("Были рады помочь, всего доброго");
-
     }
+
+
 }
+/*}*/
 
 enum Country {
     Afghanistan("Афганистан"),
